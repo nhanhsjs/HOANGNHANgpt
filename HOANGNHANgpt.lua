@@ -47,7 +47,7 @@ end)
 --==[ GUI: Rayfield ]==--
 local Rayfield = loadstring(game:HttpGet("https://raw.githubusercontent.com/shlexware/Rayfield/main/source.lua"))()
 local Window = Rayfield:CreateWindow({
-   Name = "🍌 Banana ChatGPT Hub v1.3",
+   Name = "Banana ChatGPT Hub v1.3",
    LoadingTitle = "BananaGPT Loading...",
    LoadingSubtitle = "by ChatGPT",
    ConfigurationSaving = {
@@ -60,7 +60,7 @@ local Window = Rayfield:CreateWindow({
 })
 
 --==[ Farm Tab ]==--
-local FarmTab = Window:CreateTab("⚔️ Auto Farm", 4483362458)
+local FarmTab = Window:CreateTab("Auto Farm", 4483362458)
 
 local function StartAutoFarm()
     getgenv().AutoFarm = true
@@ -126,7 +126,7 @@ local function FlyTo(targetPos)
     hrp.CFrame = CFrame.new(targetPos)
 end
 
-local TP = Window:CreateTab("🗺️ Teleport", 4483362458)
+local TP = Window:CreateTab("Teleport", 4483362458)
 
 TP:CreateButton({
     Name = "Starter Island",
