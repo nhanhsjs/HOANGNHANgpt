@@ -16,7 +16,7 @@ frame.Draggable = true
 local title = Instance.new("TextLabel", frame)
 title.Size = UDim2.new(1, 0, 0, 40)
 title.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-title.Text = "HOANGNHANgpt v1.4.5 - Bay Liên Tục Cao"
+title.Text = "HOANGNHANgpt v1.4.6 - Bay Liên Tục Cao 80"
 title.TextColor3 = Color3.new(1, 1, 1)
 title.TextScaled = true
 title.Font = Enum.Font.SourceSansBold
@@ -65,7 +65,7 @@ for i, tabName in ipairs(tabs) do
         switchTab(tabName)
     end)
 
-    -- Nội dung Auto Farm
+    --===[ Auto Farm Tab ]===--
     if tabName == "Auto Farm" then
         getgenv().AutoFarmLevel = false
         getgenv().AutoAttack = false
@@ -95,13 +95,13 @@ for i, tabName in ipairs(tabs) do
         end)
     end
 
-    -- Nội dung Teleport
+    --===[ Teleport Tab ]===--
     if tabName == "Teleport" then
         getgenv().Teleporting = false
         local islands = {
-            ["Starter"] = CFrame.new(0, 50, 0),
-            ["Jungle"] = CFrame.new(-1150, 100, 350),
-            ["Desert"] = CFrame.new(1150, 80, 450)
+            ["Starter"] = CFrame.new(0, 20, 0),
+            ["Jungle"] = CFrame.new(-1150, 20, 350),
+            ["Desert"] = CFrame.new(1150, 20, 450)
         }
 
         for island, cf in pairs(islands) do
@@ -119,9 +119,10 @@ for i, tabName in ipairs(tabs) do
                     local char = game.Players.LocalPlayer.Character
                     local hrp = char and char:FindFirstChild("HumanoidRootPart")
                     if not hrp then return end
-                    while getgenv().Teleporting and hrp and (hrp.Position - cf.Position).Magnitude > 10 do
-                        hrp.CFrame = hrp.CFrame:Lerp(cf, 0.01) + Vector3.new(0,3,0)
-                        wait(0.03)
+                    local target = cf + Vector3.new(0, 80, 0) -- ✅ bay cao hơn mặt đất
+                    while getgenv().Teleporting and (hrp.Position - target.Position).Magnitude > 10 do
+                        hrp.CFrame = hrp.CFrame:Lerp(target, 0.01)
+                        wait(0.05)
                     end
                     getgenv().Teleporting = false
                 end)
@@ -129,7 +130,7 @@ for i, tabName in ipairs(tabs) do
         end
     end
 
-    -- Nội dung Anti-Ban
+    --===[ Anti-Ban Tab ]===--
     if tabName == "Anti-Ban" then
         local info = Instance.new("TextLabel", content)
         info.Size = UDim2.new(1, -20, 1, -20)
@@ -174,5 +175,5 @@ pcall(function()
     end)
 end)
 
--- Mặc định bật tab đầu
+--===[ Bật tab Auto Farm mặc định ]===--
 switchTab("Auto Farm")
