@@ -123,8 +123,8 @@ for i, tabName in ipairs(tabs) do
                 local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
                 if hrp then
                     for i = 1, 100 do
-                        hrp.CFrame = hrp.CFrame:Lerp(cf, 0.05)
-                        wait(0.01)
+                        hrp.CFrame = hrp.CFrame:Lerp(cf, 0.02) -- ✅ Giảm tốc độ bay
+                        wait(0.015)
                     end
                 end
             end)
@@ -176,5 +176,5 @@ pcall(function()
     end)
 end)
 
--- Mặc định bật tab đầu
+--===[ Bật tab đầu tiên mặc định ]===--
 switchTab("Auto Farm")
