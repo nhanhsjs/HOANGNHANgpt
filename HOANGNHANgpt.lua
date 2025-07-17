@@ -5,7 +5,7 @@ local Rayfield = loadstring(game:HttpGet("https://raw.githubusercontent.com/shle
 
 local Window = Rayfield:CreateWindow({
     Name = "HOANGNHANgpt v1.4",
-    LoadingTitle = "HOANGNHANgpt Hub",
+    LoadingTitle = "Đang khởi động HOANGNHANgpt...",
     LoadingSubtitle = "Delta Android Premium",
     ConfigurationSaving = {
         Enabled = false
@@ -19,7 +19,7 @@ local Window = Rayfield:CreateWindow({
 --===[ ANTI BAN TAB ]===--
 local TabAnti = Window:CreateTab("Anti-Ban")
 TabAnti:CreateParagraph({
-    Title = "Anti-Ban",
+    Title = "Chống ban",
     Content = "Chống Kick, phá GUI, Remote nguy hiểm."
 })
 
@@ -38,14 +38,14 @@ end)
 
 --===[ AUTO FARM TAB ]===--
 local TabFarm = Window:CreateTab("Auto Farm")
-TabFarm:CreateSection("Farm Level")
+TabFarm:CreateSection("Cày cấp")
 
 getgenv().AutoFarmLevel = false
 getgenv().AutoAttack = false
 getgenv().FlySpeed = 150
 
 TabFarm:CreateToggle({
-    Name = "Auto Farm Level",
+    Name = "Bật Auto Farm Level",
     CurrentValue = false,
     Callback = function(v)
         getgenv().AutoFarmLevel = v
@@ -53,7 +53,7 @@ TabFarm:CreateToggle({
 })
 
 TabFarm:CreateToggle({
-    Name = "Auto Attack",
+    Name = "Bật Auto Đánh thường (Z)",
     CurrentValue = false,
     Callback = function(v)
         getgenv().AutoAttack = v
@@ -72,7 +72,7 @@ TabFarm:CreateSlider({
 
 --===[ TELEPORT TAB ]===--
 local TabTP = Window:CreateTab("Teleport")
-TabTP:CreateSection("Bay đến các đảo")
+TabTP:CreateSection("Bay đến đảo")
 
 local islands = {
     ["Starter Island"] = CFrame.new(0, 20, 0),
@@ -85,12 +85,8 @@ local islands = {
 }
 
 TabTP:CreateDropdown({
-    Name = "Chọn đảo cần đến",
-    Options = table.pack(unpack((function()
-        local list = {}
-        for k in pairs(islands) do table.insert(list, k) end
-        return list
-    end)())),
+    Name = "Chọn đảo",
+    Options = {"Starter Island", "Jungle", "Desert", "Frozen Village", "Marine Fortress", "Sky Island", "Colosseum"},
     CurrentOption = "Starter Island",
     Callback = function(option)
         local target = islands[option]
@@ -107,8 +103,8 @@ TabTP:CreateDropdown({
 --===[ GIAO DIỆN TAB ]===--
 local TabUI = Window:CreateTab("Giao Diện")
 TabUI:CreateParagraph({
-    Title = "GUI",
-    Content = "GUI Rayfield hỗ trợ kéo, theme mặc định."
+    Title = "Rayfield GUI",
+    Content = "Ấn RightCtrl để ẩn/hiện, kéo tự do."
 })
 TabUI:CreateButton({
     Name = "Ẩn/Hiện GUI (RightCtrl)",
@@ -123,7 +119,7 @@ spawn(function()
         if getgenv().AutoFarmLevel then
             local char = game.Players.LocalPlayer.Character
             if not char or not char:FindFirstChild("HumanoidRootPart") then continue end
-            local npc = workspace:FindFirstChild("Bandit") -- Demo enemy
+            local npc = workspace:FindFirstChild("Bandit") -- Demo quái
             if npc and npc:FindFirstChild("HumanoidRootPart") then
                 repeat
                     local hrp = char.HumanoidRootPart
