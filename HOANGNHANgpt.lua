@@ -18,7 +18,7 @@ frame.Draggable = true
 local title = Instance.new("TextLabel", frame)
 title.Size = UDim2.new(1, 0, 0, 40)
 title.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-title.Text = "HOANGNHANgpt v1.4.2 - GUI Custom"
+title.Text = "HOANGNHANgpt v1.4.4 - GUI Custom (Bay Chậm)"
 title.TextColor3 = Color3.new(1, 1, 1)
 title.TextScaled = true
 title.Font = Enum.Font.SourceSansBold
@@ -122,9 +122,9 @@ for i, tabName in ipairs(tabs) do
             btn.MouseButton1Click:Connect(function()
                 local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
                 if hrp then
-                    for i = 1, 100 do
-                        hrp.CFrame = hrp.CFrame:Lerp(cf, 0.02) -- ✅ Giảm tốc độ bay
-                        wait(0.015)
+                    for i = 1, 200 do -- ✅ bay 200 bước (gấp đôi trước)
+                        hrp.CFrame = hrp.CFrame:Lerp(cf, 0.005) -- ✅ rất chậm
+                        wait(0.03) -- ✅ tăng delay
                     end
                 end
             end)
@@ -176,5 +176,5 @@ pcall(function()
     end)
 end)
 
---===[ Bật tab đầu tiên mặc định ]===--
+-- Mặc định bật tab đầu tiên
 switchTab("Auto Farm")
