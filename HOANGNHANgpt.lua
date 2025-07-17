@@ -1,136 +1,98 @@
--- Banana ChatGPT Hub v1.3 - HOANGNHANgpt Edition
-repeat wait() until game:IsLoaded() and game.Players.LocalPlayer
+-- HOANGNHANgpt v1.3 - Delta Android | Giao diện đơn giản, tối ưu, có kéo thả
 
---==[ Anti-Ban System ]==--
-local lp = game.Players.LocalPlayer
-local mt = getrawmetatable(game)
-setreadonly(mt, false)
-local oldNamecall = mt.__namecall
-
-mt.__namecall = newcclosure(function(self, ...)
-    local args = {...}
-    local method = getnamecallmethod()
-    if tostring(self):lower():find("kick") or tostring(args[1]):lower():find("kick") then
-        return
-    end
-    return oldNamecall(self, unpack(args))
-end)
-
-task.spawn(function()
-    while wait(1) do
-        local char = lp.Character
-        if char and not char:FindFirstChild("Humanoid") then
-            Instance.new("Humanoid", char)
+-- [1] Anti-ban cơ bản
+local lp = game:GetService("Players").LocalPlayer
+if lp and lp.Character then
+    for _, v in ipairs(lp.Character:GetDescendants()) do
+        if v:IsA("RemoteEvent") or v:IsA("RemoteFunction") then
+            pcall(function() v:Destroy() end)
         end
     end
-end)
+end
 
-pcall(function()
-    for _, v in pairs(getconnections(game:GetService("Players").LocalPlayer.Idled)) do
-        v:Disable()
-    end
-end)
+-- [2] GUI - Giao diện đơn giản
+local gui = Instance.new("ScreenGui", game.CoreGui)
+gui.Name = "HOANGNHANgptHub"
 
---==[ Fullscreen Background (Yae Miko) ]==--
-pcall(function()
-    local bg = Instance.new("ImageLabel")
-    bg.Name = "BananaChatGPT_BG"
-    bg.Parent = game:GetService("CoreGui")
-    bg.Image = "rbxassetid://17121804726" -- hình nền Yae Miko
-    bg.Size = UDim2.new(1, 0, 1, 0)
-    bg.Position = UDim2.new(0, 0, 0, 0)
-    bg.BackgroundTransparency = 1
-    bg.ImageTransparency = 0.2
-    bg.ZIndex = 0
-end)
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 300, 0, 260)
+frame.Position = UDim2.new(0.5, -150, 0.5, -130)
+frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+frame.BorderSizePixel = 0
+frame.Parent = gui
+frame.Active = true
+frame.Draggable = true
 
---==[ GUI: Rayfield ]==--
-local Rayfield = loadstring(game:HttpGet("https://raw.githubusercontent.com/shlexware/Rayfield/main/source.lua"))()
-local Window = Rayfield:CreateWindow({
-   Name = "Banana ChatGPT Hub v1.3",
-   LoadingTitle = "BananaGPT Loading...",
-   LoadingSubtitle = "by ChatGPT",
-   ConfigurationSaving = {
-      Enabled = false
-   },
-   Discord = {
-      Enabled = false
-   },
-   KeySystem = false
-})
+local title = Instance.new("TextLabel", frame)
+title.Size = UDim2.new(1, 0, 0, 40)
+title.Text = "HOANGNHANgpt v1.3"
+title.TextColor3 = Color3.new(1, 1, 1)
+title.BackgroundColor3 = Color3.fromRGB(0, 120, 255)
+title.Font = Enum.Font.SourceSansBold
+title.TextSize = 20
 
---==[ Farm Tab ]==--
-local FarmTab = Window:CreateTab("Auto Farm", 4483362458)
+-- [3] Nút Auto Farm
+local afBtn = Instance.new("TextButton", frame)
+afBtn.Size = UDim2.new(1, -20, 0, 40)
+afBtn.Position = UDim2.new(0, 10, 0, 60)
+afBtn.Text = "Bật Auto Farm"
+afBtn.BackgroundColor3 = Color3.fromRGB(0, 200, 100)
+afBtn.TextColor3 = Color3.new(1, 1, 1)
+afBtn.Font = Enum.Font.SourceSans
+afBtn.TextSize = 18
 
-local function StartAutoFarm()
-    getgenv().AutoFarm = true
-    task.spawn(function()
-        while getgenv().AutoFarm do
-            pcall(function()
-                local enemy = nil
-                for i, v in pairs(workspace.Enemies:GetChildren()) do
-                    if v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
-                        enemy = v
-                        break
-                    end
-                end
+-- [4] Nút Teleport bay
+local tpBtn = Instance.new("TextButton", frame)
+tpBtn.Size = UDim2.new(1, -20, 0, 40)
+tpBtn.Position = UDim2.new(0, 10, 0, 110)
+tpBtn.Text = "Bay đến Đảo Chính"
+tpBtn.BackgroundColor3 = Color3.fromRGB(70, 130, 180)
+tpBtn.TextColor3 = Color3.new(1, 1, 1)
+tpBtn.Font = Enum.Font.SourceSans
+tpBtn.TextSize = 18
 
-                if enemy then
-                    local hrp = lp.Character and lp.Character:FindFirstChild("HumanoidRootPart")
-                    if hrp then
-                        hrp.CFrame = enemy.HumanoidRootPart.CFrame * CFrame.new(0, 5, 0)
-                        repeat task.wait()
-                        until not enemy.Parent or enemy.Humanoid.Health <= 0 or not getgenv().AutoFarm
-                    end
-                else
-                    task.wait(0.25)
-                end
-            end)
-            task.wait()
+-- [5] Nút Thoát Hub
+local closeBtn = Instance.new("TextButton", frame)
+closeBtn.Size = UDim2.new(1, -20, 0, 40)
+closeBtn.Position = UDim2.new(0, 10, 0, 210)
+closeBtn.Text = "Đóng Hub"
+closeBtn.BackgroundColor3 = Color3.fromRGB(180, 50, 50)
+closeBtn.TextColor3 = Color3.new(1, 1, 1)
+closeBtn.Font = Enum.Font.SourceSans
+closeBtn.TextSize = 18
+
+-- [6] Chức năng Auto Farm
+local autoFarm = false
+afBtn.MouseButton1Click:Connect(function()
+    autoFarm = not autoFarm
+    afBtn.Text = autoFarm and "Tắt Auto Farm" or "Bật Auto Farm"
+    spawn(function()
+        while autoFarm do
+            local enemyFolder = workspace:FindFirstChild("Enemies") or workspace:FindFirstChild("NPCs")
+            local enemy = enemyFolder and enemyFolder:FindFirstChildWhichIsA("Model")
+            if enemy and enemy:FindFirstChild("HumanoidRootPart") and lp.Character and lp.Character:FindFirstChild("HumanoidRootPart") then
+                lp.Character.HumanoidRootPart.CFrame = enemy.HumanoidRootPart.CFrame * CFrame.new(0, 20, 0)
+            end
+            wait(0.15)
         end
     end)
-end
+end)
 
-FarmTab:CreateToggle({
-   Name = "Auto Farm Mobs",
-   CurrentValue = false,
-   Callback = function(Value)
-       getgenv().AutoFarm = Value
-       if Value then StartAutoFarm() end
-   end,
-})
-
---==[ Teleport Tab (Fly Mode) ]==--
-local function FlyTo(targetPos)
-    local hrp = lp.Character and lp.Character:FindFirstChild("HumanoidRootPart")
-    if not hrp then return end
-
-    local bv = Instance.new("BodyVelocity")
-    bv.MaxForce = Vector3.new(1,1,1) * 1e9
-    bv.Velocity = Vector3.zero
-    bv.P = 1250
-    bv.Parent = hrp
-
-    local function dist() return (hrp.Position - targetPos).Magnitude end
-    while dist() > 5 do
-        if not lp.Character or not lp.Character:FindFirstChild("HumanoidRootPart") then
-            bv:Destroy()
-            return
-        end
-        local dir = (targetPos - hrp.Position).Unit
-        bv.Velocity = dir * math.clamp(dist() * 2, 100, 300)
-        task.wait()
+-- [7] Chức năng Teleport Bay (chống kick)
+tpBtn.MouseButton1Click:Connect(function()
+    local target = workspace:FindFirstChild("MainIsland") or workspace:FindFirstChild("Island 1")
+    if target and target:IsA("BasePart") and lp.Character and lp.Character:FindFirstChild("HumanoidRootPart") then
+        local root = lp.Character.HumanoidRootPart
+        spawn(function()
+            for i = 1, 50 do
+                root.CFrame = root.CFrame:Lerp(target.CFrame * CFrame.new(0, 10, 0), 0.1)
+                wait()
+            end
+        end)
     end
+end)
 
-    bv:Destroy()
-    hrp.CFrame = CFrame.new(targetPos)
-end
-
-local TP = Window:CreateTab("Teleport", 4483362458)
-
-TP:CreateButton({
-    Name = "Starter Island",
-    Callback = function()
-        FlyTo(Vector3.new(1145, 17, 1633)) -- Tọa độ ví dụ
-    end,
-})
+-- [8] Đóng hub
+closeBtn.MouseButton1Click:Connect(function()
+    gui:Destroy()
+end)
